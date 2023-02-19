@@ -1,5 +1,6 @@
 import re
 
+""" comprueba que la ip este dada en formato x.x.x.x y que los octetos vayan de 0 - 255 """
 def verifyIp(ip):
     """ verificacion de la ip """
     if re.findall("\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}", ip):  # verifica el formato correcto de la ip
@@ -13,6 +14,7 @@ def verifyIp(ip):
 
     return True
 
+""" calcula los bits necesarios para las subredes/hosts que se requieren """
 def necessaryBits(required):
     bits = 0
     for i in range(32):
@@ -23,12 +25,13 @@ def necessaryBits(required):
 
     return bits
 
+""" calcula la nueva mascara de red """
 def getMask(mask, bits, mode="net"):
     octets = mask.split(".")
     n_mask = []
 
     for o in octets:
-        if int(o) == 0:
+        if int(o) == 0:  # genera el nuevo octeto en el primer oct que sea 0
             n_oct = "1" * bits + "0" * (8 - bits)
             n_mask.append(str(int(n_oct, 2)))
             break
@@ -36,7 +39,7 @@ def getMask(mask, bits, mode="net"):
         else:
             n_mask.append(o)
 
-    while(len(n_mask) < 4):
+    while(len(n_mask) < 4):  # completa el octeto
         n_mask.append(str(int("0" * 8, 2)))
 
     return ".".join(n_mask)
@@ -48,10 +51,10 @@ def main():
     subnets = input("Cuántas subredes necesitas? (n, para no calcular): ")
     hosts = input("Cuántos hosts necesitas? (n, para no calcular): ")
     """
-    ip_base = "132.18.0.0"
-    mask = "255.255.0.0"
-    subnets = "50"
-    hosts = "1000"
+    ip_base = "200.35.2.0"
+    mask = "255.255.255.0"
+    subnets = "6"
+    hosts = "20"
 
     s_bits = h_bits = None
 
